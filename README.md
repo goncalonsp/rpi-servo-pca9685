@@ -1,7 +1,7 @@
 
 A simple Servo controller in [GO](https://golang.org/) using the [EMBD library](https://github.com/kidoman/embd) to drive the [PCA9685 controller](https://www.adafruit.com/products/815).
 
-This servo program was tested using a setup with a Raspberry Pi Zero and TGYS901D servos controlled by a PCA9685.
+This servo program was tested using a setup with a Raspberry Pi Zero and [TGYS901D servos](https://hobbyking.com/en_us/turnigytm-tgy-s901d-ds-mg-robot-servo-13kg-0-14sec-58g.html) controlled by a PCA9685.
 
 The project is built using [GB](https://getgb.io/). See [build4arm.sh](build4arm.sh).
 
