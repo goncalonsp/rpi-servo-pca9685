@@ -2,7 +2,7 @@ EXECUTABLE=bin/rpiservo-linux-arm
 REMOTE_EXECUTABLE=rpiservo
 RPI_USER=pi
 RPI_PASS=goncalonsp12
-RPI_IP=192.168.1.137
+RPI_IP=192.168.1.169
 
 all: build
 
@@ -11,6 +11,7 @@ build: src/
 
 deploy: build
 	./deploy-to-pi.sh $(EXECUTABLE) $(REMOTE_EXECUTABLE) $(RPI_USER) $(RPI_IP) $(RPI_PASS)
+	./deploy-to-pi.sh bin/servo-calibrator-linux-arm servo-calibrator $(RPI_USER) $(RPI_IP) $(RPI_PASS)
 
 clean:
 	-rm $(EXECUTABLE) || true

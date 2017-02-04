@@ -18,7 +18,7 @@ import (
 	_ "github.com/kidoman/embd/host/rpi"
 )
 
-func listenForAngles(anglesChan chan int) {
+func listenForEntry(anglesChan chan int) {
 	inputReader := bufio.NewReader(os.Stdin)
 	for {
 		s, err := inputReader.ReadString('\n')
@@ -48,37 +48,25 @@ func main() {
 	defer d.Close()
 
 	pwm0 := d.ServoChannel(0)
-	pwm1 := d.ServoChannel(1)
-	pwm2 := d.ServoChannel(2)
 	servo0 := servo.New(pwm0)
-	servo0.Minus = 640
-	servo0.Maxus = 2780
-	servo1 := servo.New(pwm1)
-	servo1.Minus = 640
-	servo1.Maxus = 2780
-	servo2 := servo.New(pwm2)
-	servo2.Minus = 640
-	servo2.Maxus = 2780
 
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, os.Kill)
 
-	anglesChan := make(chan int)
-	go listenForAngles(anglesChan)
+	pulseChan := make(chan int)
+	go listenForEntry(pulseChan)
 
 	defer func() {
-		servo0.SetAngle(90)
-		servo1.SetAngle(90)
-		servo2.SetAngle(90)
+		servo0.SetAngle(1000)
 	}()
+
+	fmt.Print("Enter values to experiment, try slow increments:\n")
 
 	for {
 		select {
-		case angle := <-anglesChan:
-			fmt.Printf("> Setting angle to %d degrees\n", angle)
-			servo0.SetAngle(angle)
-			servo1.SetAngle(angle)
-			servo2.SetAngle(angle)
+		case pulse := <-pulseChan:
+			fmt.Printf("> Setting to %d microseconds\n", pulse)
+			servo0.PWM.SetMicroseconds(int(pulse))
 		case <-c:
 			return
 		}
